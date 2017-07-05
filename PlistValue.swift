@@ -1,10 +1,10 @@
-
-
-struct PlistValue {
-    let value: String
+struct PlistValue<T>{
+    let value: T
     
     init(key: String, inPlist: String = "Keys") throws {
-        guard let path = Bundle.main.path(forResource: "Keys", ofType: "plist") else {
+        guard let path = Bundle.main.path(forResource: "Keys",
+                                          ofType: "plist") else {
+                                            
             throw PlistValueError.noListAtPath
         }
         
@@ -12,13 +12,14 @@ struct PlistValue {
             throw PlistValueError.incorrectFormat
         }
         
-        guard let value = keyDict[key] as? String else {
+        guard let value = keyDict[key] as? T else {
             throw PlistValueError.noValueAtKey(key: key)
         }
         
         self.value = value
     }
 }
+
 
 enum PlistValueError: Error {
     case noListAtPath
